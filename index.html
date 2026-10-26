@@ -129,7 +129,7 @@ body{background:#f4f8f6}
 </div>
 <p class="settings-note">Your shifts and other records stay on this device. Shift It updates can change the app code without intentionally replacing your saved records.</p>
 </div>
-</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift It · v2.6.1</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
+</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift It · v2.6.2</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
 <p class="settings-note"><b>Your records are stored on this device.</b> Export a backup regularly and before clearing Safari data or changing phones. App updates are designed to keep existing records.</p><div class="actions"><button class="btn secondary" onclick="exportBackup()">Export backup</button><label class="btn ghost">Import backup<input type="file" accept=".json" style="display:none" onchange="importBackup(this)"></label></div></div></section></main><nav class="nav" aria-label="Main navigation">
 <button class="active" onclick="go('dashboard',this)"><span>⌂</span>Home</button>
 <button onclick="go('shifts',this)"><span>◷</span>Shifts</button>
@@ -170,7 +170,7 @@ body{background:#f4f8f6}
 <div class="actions"><button class="btn" onclick="saveExpense()">Save expense</button><button id="deleteExpenseBtn" class="btn ghost" onclick="deleteExpense()" style="display:none">Delete</button><button class="btn ghost" onclick="closeModal('expenseModal')">Cancel</button></div>
 </div></div>
 <script>
-const APP_VERSION='2.6.1',DATA_SCHEMA=3;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
+const APP_VERSION='2.6.2',DATA_SCHEMA=3;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
 let db=JSON.parse(localStorage.getItem('shift22-db')||localStorage.getItem('shiftmint-db')||'null')||seed;
 function migrateData(x){
  x=x&&typeof x==='object'?x:{};
@@ -220,41 +220,19 @@ function invoiceData(ids,number,date,id){let su=surgery(id),items=db.shifts.filt
 function invoiceMarkup(x){let p=db.settings.profile||{},s=x.items[0]||{},c=calc(s);return `<div class="invoice-paper one-page-invoice"><div class="invoice-head"><div><h1 style="color:var(--dark);margin:0 0 4px">INVOICE</h1><b>${p.name||"Add your name in Settings"}</b><div class="sub">${p.address||""}${p.email?"<br>"+p.email:""}</div></div><div class="right"><b>${x.number}</b><div class="sub">Invoice date: ${new Date(x.date+'T12:00').toLocaleDateString('en-GB')}</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="invoice-two-col"><div><b>Invoice to</b><div>${x.su.name}</div><div class="sub">${x.su.address||'Add surgery billing address in Surgeries'}${x.su.email?"<br>"+x.su.email:""}</div></div><div class="right"><b>Amount due</b><div class="invoice-total">${money(x.total)}</div><div class="sub">Due ${new Date(x.due+'T12:00').toLocaleDateString('en-GB')}</div></div></div><table class="invoice-table compact"><thead><tr><th>Shift</th><th>Chargeable time</th><th>Rate</th><th class="right">Amount</th></tr></thead><tbody>${x.items.map(s=>{let c=calc(s);return `<tr><td>${new Date(s.date+'T12:00').toLocaleDateString('en-GB')}</td><td>${c.hours.toFixed(2)} hrs${c.breakMinutes?`<div class="sub">${c.breakMinutes} min unpaid break deducted</div>`:''}</td><td>${money(s.rate)}/hr</td><td class="right"><b>${money(c.value)}</b></td></tr>`}).join('')}</tbody></table>${x.vat?`<div class="invoice-summary"><span>Subtotal ${money(x.subtotal)}</span><span>VAT ${money(x.vat)}</span></div>`:''}<div class="invoice-due"><span>Total to pay</span><b>${money(x.total)}</b></div><div class="payment-box"><b>Payment details</b><div class="sub">${p.bank?`Bank: ${p.bank}<br>`:""}${p.accountName?`Account name: ${p.accountName}<br>`:""}${p.sortCode?`Sort code: ${p.sortCode}<br>`:""}${p.accountNumber?`Account number: ${p.accountNumber}`:""}</div></div>${p.invoiceNote?`<div class="invoice-note">${p.invoiceNote}</div>`:""}${!p.name?`<div class="notice">Add your invoice details in Settings before sending.</div>`:""}</div>`}
 
 function printInvoiceOnly(){
-  const preview=document.getElementById('invoicePreview');
-  const paper=preview&&preview.querySelector('.invoice-paper');
-  if(!paper){alert('Open or preview an invoice first.');return;}
-  const w=window.open('','_blank');
-  if(!w){alert('Please allow the print window, then try again.');return;}
-  const css=`
-    @page{size:A4;margin:12mm}
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#fff;color:#20352c;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-    body{font-size:11pt}
-    .invoice-paper{width:100%;max-width:186mm;margin:0 auto;border:0;padding:0;box-shadow:none}
-    .invoice-head{display:flex;justify-content:space-between;gap:20px}
-    .invoice-two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-    .right{text-align:right!important}
-    .sub{font-size:9.5pt;color:#66756e;margin-top:3px}
-    .invoice-total{font-size:22pt;font-weight:900;color:#193b2e;margin-top:5px}
-    .invoice-table{width:100%;border-collapse:collapse;margin-top:20px}
-    .invoice-table th,.invoice-table td{padding:7px 5px;border-bottom:1px solid #dce9e2;text-align:left}
-    .invoice-summary{display:flex;justify-content:flex-end;gap:22px;margin-top:12px;font-size:10pt}
-    .invoice-due{margin-top:16px;padding:12px 14px;background:#effaf4;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-size:16pt}
-    .invoice-due b{font-size:20pt}
-    .payment-box{margin-top:18px;padding-top:14px;border-top:1px solid #dce9e2}
-    .invoice-note{margin-top:10px;font-size:9.5pt}
-    .notice{background:#fff4d7;padding:10px;border-radius:10px;font-size:9.5pt}
-    h1{page-break-after:avoid}
-    table,tr,td,th,.payment-box,.invoice-due{break-inside:avoid;page-break-inside:avoid}
-    @media print{html,body{width:auto;min-height:0}.invoice-paper{page-break-inside:avoid}}
-  `;
-  w.document.open();
-  w.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shift It Invoice</title><style>'+css+'</style></head><body>'+paper.outerHTML+'</body></html>');
-  w.document.close();
-  w.focus();
-  setTimeout(()=>{w.print();},350);
+ const preview=document.getElementById('invoicePreview'),paper=preview&&preview.querySelector('.invoice-paper');
+ if(!paper){alert('Open or preview an invoice first.');return;}
+ let old=document.getElementById('shiftItInvoicePrintFrame');if(old)old.remove();
+ let frame=document.createElement('iframe');
+ frame.id='shiftItInvoicePrintFrame';
+ frame.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+ document.body.appendChild(frame);
+ const css=`@page{size:A4;margin:12mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#20352c;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}body{font-size:11pt}.invoice-paper{width:100%;max-width:186mm;margin:0 auto;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}.invoice-head{display:flex;justify-content:space-between;gap:20px}.invoice-two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px}.right{text-align:right!important}.sub{font-size:9.5pt;color:#66756e;margin-top:3px}.invoice-total{font-size:22pt;font-weight:900;color:#193b2e}.invoice-table{width:100%;border-collapse:collapse;margin-top:20px}.invoice-table th,.invoice-table td{padding:7px 5px;border-bottom:1px solid #dce9e2;text-align:left}.invoice-summary{display:flex;justify-content:flex-end;gap:22px;margin-top:12px}.invoice-due{margin-top:16px;padding:12px 14px;background:#effaf4;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-size:16pt}.invoice-due b{font-size:20pt}.payment-box{margin-top:18px;padding-top:14px;border-top:1px solid #dce9e2}.invoice-note{margin-top:10px;font-size:9.5pt}.notice{background:#fff4d7;padding:10px;border-radius:10px}table,tr,td,th,.payment-box,.invoice-due,.invoice-paper{break-inside:avoid;page-break-inside:avoid}`;
+ const doc=frame.contentWindow.document;
+ doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Shift It Invoice</title><style>'+css+'</style></head><body>'+paper.outerHTML+'</body></html>');doc.close();
+ setTimeout(()=>{try{frame.contentWindow.focus();frame.contentWindow.print()}catch(e){alert('Could not open the invoice print screen. Please try again.')}},400);
+ setTimeout(()=>{if(frame.parentNode)frame.remove()},30000);
 }
-
 function buildInvoice(){let ids=[...document.querySelectorAll('.icheck:checked')].map(x=>x.value);if(!ids.length)return alert('Select one shift to invoice.');if(ids.length>1)return alert('Please create one invoice per shift.');let num='SM-'+new Date(document.getElementById('iDate').value+'T12:00').getFullYear()+'-'+String(db.invoices.length+1).padStart(3,'0'),x=invoiceData(ids,num,document.getElementById('iDate').value,document.getElementById('iSurgery').value);document.getElementById('invoicePreview').innerHTML=invoiceMarkup(x)+`<div class="actions no-print"><button class="btn" onclick='saveInvoice(${JSON.stringify(ids)},"${num}")'>Save invoice</button><button class="btn secondary" onclick="printInvoiceOnly()">Print / Save PDF</button></div>`}
 function saveInvoice(ids,num){let x=invoiceData(ids,num,document.getElementById('iDate').value,document.getElementById('iSurgery').value),id='i'+Date.now();db.invoices.push({id,number:num,surgery:document.getElementById('iSurgery').value,date:document.getElementById('iDate').value,due:x.due,status:'Awaiting Payment',submittedDate:document.getElementById('iDate').value,paymentDate:'',shiftIds:ids,total:x.total});db.shifts.forEach(s=>{if(ids.includes(s.id)){s.invoice=num;s.status='Awaiting Payment'}});persist();closeModal('invoiceModal')}
 function showSavedInvoice(id){let i=db.invoices.find(x=>x.id===id),x=invoiceData(i.shiftIds,i.number,i.date,i.surgery);document.getElementById('invoicePreview').innerHTML=invoiceMarkup(x)+`<div class="actions no-print"><button class="btn secondary" onclick="printInvoiceOnly()">Print / Save PDF</button><button class="btn ghost" onclick="closeModal('invoiceModal')">Close</button></div>`;document.getElementById('invoiceModal').classList.add('show')}
