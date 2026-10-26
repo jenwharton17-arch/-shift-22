@@ -44,7 +44,12 @@ body{background:#f4f8f6}
 .more-grid{gap:11px}.more-link{min-height:72px;font-size:16px;padding:15px 17px}.more-link small{font-size:12px;line-height:1.35}
 @media(max-width:390px){.page{padding-left:11px;padding-right:11px}.grid{gap:8px}.card{padding:13px}.metric b{font-size:18px}.quick-actions{gap:8px}.nav{padding-left:4px;padding-right:4px}.nav button{font-size:11px!important}}
 </style></head><body><div class="app"><header class="top"><div class="brand"><div class="logo">£</div>Shift 22</div><div class="tag">Your shifts. Your money. Sorted.</div></header><main class="page">
-<section id="dashboard" class="view active"><div class="grid"><div class="card metric"><small>EARNED</small><b id="earned">£0</b></div><div class="card metric"><small>OUTSTANDING</small><b id="outstanding">£0</b></div><div class="card metric"><small>PAID</small><b id="paid">£0</b></div><div class="card metric"><small>TAX POT</small><b id="taxpot">£0</b></div></div>
+<section id="dashboard" class="view active">
+<div class="card" id="welcomeCard" style="margin-bottom:12px">
+  <div class="sub">SHIFT 22</div>
+  <h2 id="welcomeName" style="margin:4px 0 2px">Welcome</h2>
+  <div class="settings-note">Your shifts, money and records — all in one place.</div>
+</div><div class="grid"><div class="card metric"><small>EARNED</small><b id="earned">£0</b></div><div class="card metric"><small>OUTSTANDING</small><b id="outstanding">£0</b></div><div class="card metric"><small>PAID</small><b id="paid">£0</b></div><div class="card metric"><small>TAX POT</small><b id="taxpot">£0</b></div></div>
 <div class="quick-actions">
 <button class="btn" onclick="openShift()">＋ Add shift</button>
 <button class="btn secondary" onclick="openExpense()">▣ Add expense</button>
@@ -123,13 +128,21 @@ body{background:#f4f8f6}
 </div>
 <p class="settings-note">Your shifts and other records stay on this device. App updates can change the code without intentionally replacing your saved records.</p>
 </div>
-</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift 22 · v2.1.0</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
+</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift 22 · v2.2.0</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
 <p class="settings-note"><b>Your records are stored on this device.</b> Export a backup regularly and before clearing Safari data or changing phones. App updates are designed to keep existing records.</p><div class="actions"><button class="btn secondary" onclick="exportBackup()">Export backup</button><label class="btn ghost">Import backup<input type="file" accept=".json" style="display:none" onchange="importBackup(this)"></label></div></div></section></main><nav class="nav" aria-label="Main navigation">
 <button class="active" onclick="go('dashboard',this)"><span>⌂</span>Home</button>
 <button onclick="go('shifts',this)"><span>◷</span>Shifts</button>
 <button onclick="go('expensesView',this)"><span>▣</span>Expenses</button>
 <button onclick="go('more',this)"><span>•••</span>More</button>
 </nav></div>
+<div id="welcomeModal" class="modal"><div class="sheet">
+<h2>Welcome to Shift 22</h2>
+<p class="settings-note">Let’s personalise your app. Your details are saved on this device and are not added to the public Shift 22 website.</p>
+<div class="formgrid">
+  <div class="field full"><label>What should Shift 22 call you?</label><input id="welcomeNameInput" autocomplete="name" placeholder="Your name"></div>
+</div>
+<div class="actions"><button class="btn" onclick="finishWelcome()">Start using Shift 22</button></div>
+</div></div>
 <div id="shiftModal" class="modal"><div class="sheet"><h2 id="shiftModalTitle">Add shift</h2><div class="formgrid"><div class="field full"><label>Surgery</label><select id="sSurgery"></select></div><div class="field"><label>Date</label><input id="sDate" type="date"></div><div class="field"><label>Rate per hour</label><input id="sRate" type="number" step="0.01"></div><div class="field"><label>Start</label><input id="sStart" type="time"></div><div class="field"><label>Finish</label><input id="sFinish" type="time"></div><div class="field"><label>Break (hours)</label><input id="sBreak" type="number" step="0.25" value="0"></div><div class="field"><label>Status</label><select id="sStatus"><option>Worked</option><option>Invoice Submitted</option><option>Awaiting Payment</option><option>Paid</option><option>Planned</option></select></div><div class="field"><label>Include in tax estimate?</label><select id="sTax"><option value="yes">Yes</option><option value="no">No</option></select></div><div class="field full"><label>Notes</label><textarea id="sNotes"></textarea></div></div><div class="actions"><button class="btn" onclick="saveShift()" id="saveShiftBtn">Save shift</button><button class="btn ghost" id="deleteShiftBtn" onclick="deleteShift()" style="display:none">Delete shift</button><button class="btn ghost" onclick="closeModal('shiftModal')">Cancel</button></div></div></div>
 <div id="surgeryModal" class="modal"><div class="sheet"><h2 id="surgeryModalTitle">Add surgery</h2><div class="formgrid"><div class="field full"><label>Surgery name</label><input id="suName"></div><div class="field"><label>Default hourly rate</label><input id="suRate" type="number" step="0.01" value="28"></div><div class="field"><label>Payment terms (days)</label><input id="suTerms" type="number" value="14"></div><div class="field full"><label>Billing email</label><input id="suEmail" type="email"></div><div class="field full"><label>Billing address</label><textarea id="suAddress"></textarea></div></div><div class="actions"><button class="btn" id="saveSurgeryBtn" onclick="saveSurgery()">Save surgery</button><button class="btn ghost" id="deleteSurgeryBtn" onclick="deleteSurgery()" style="display:none">Delete surgery</button><button class="btn ghost" onclick="closeModal('surgeryModal')">Cancel</button></div></div></div>
 <div id="invoiceModal" class="modal"><div class="sheet"><div class="no-print"><h2>Create invoice</h2><div class="formgrid"><div class="field"><label>Surgery</label><select id="iSurgery" onchange="invoiceCandidates()"></select></div><div class="field"><label>Invoice date</label><input id="iDate" type="date"></div><div class="field full"><label>Select uninvoiced shifts</label><div id="candidateList" class="list"></div></div></div><div class="actions"><button class="btn" onclick="buildInvoice()">Preview invoice</button><button class="btn ghost" onclick="closeModal('invoiceModal')">Cancel</button></div></div><div id="invoicePreview"></div></div></div>
@@ -156,7 +169,7 @@ body{background:#f4f8f6}
 <div class="actions"><button class="btn" onclick="saveExpense()">Save expense</button><button id="deleteExpenseBtn" class="btn ghost" onclick="deleteExpense()" style="display:none">Delete</button><button class="btn ghost" onclick="closeModal('expenseModal')">Cancel</button></div>
 </div></div>
 <script>
-const APP_VERSION='2.1.0',DATA_SCHEMA=2;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
+const APP_VERSION='2.2.0',DATA_SCHEMA=2;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
 let db=JSON.parse(localStorage.getItem('shift22-db')||localStorage.getItem('shiftmint-db')||'null')||seed;
 function migrateData(x){
  x=x&&typeof x==='object'?x:{};
@@ -206,7 +219,7 @@ function editInvoice(id){let i=db.invoices.find(x=>x.id===id);if(!i)return;let n
 function markPaid(id){let i=db.invoices.find(x=>x.id===id);if(!i)return;let d=prompt('Payment date (YYYY-MM-DD)',new Date().toISOString().slice(0,10));if(d===null)return;i.status='Paid';i.paymentDate=d||new Date().toISOString().slice(0,10);db.shifts.forEach(s=>{if(i.shiftIds.includes(s.id))s.status='Paid'});persist()}function markAwaiting(id){let i=db.invoices.find(x=>x.id===id);if(!i)return;i.status='Awaiting Payment';i.paymentDate='';db.shifts.forEach(s=>{if(i.shiftIds.includes(s.id))s.status='Awaiting Payment'});persist()}
 function taxCalc(){let included=db.shifts.filter(s=>s.status!=='Planned'&&s.taxIncluded!==false),gross=included.reduce((a,s)=>a+calc(s).value,0),profit=Math.max(0,gross-(+db.settings.expenses||0)),other=+db.settings.otherIncome||0,totalIncome=profit+other,allowance=Math.max(0,12570-Math.max(0,totalIncome-100000)/2),taxable=Math.max(0,totalIncome-allowance),basic=Math.min(taxable,37700)*.20,higher=Math.max(0,Math.min(taxable,112570)-37700)*.40,additional=Math.max(0,taxable-112570)*.45,incomeTax=basic+higher+additional,ni=Math.max(0,Math.min(profit,50270)-12570)*.06+Math.max(0,profit-50270)*.02;return{incomeTax,ni,total:incomeTax+ni,gross}}function shiftTax(s){if(s.taxIncluded===false||s.status==='Planned')return 0;let t=taxCalc(),v=calc(s).value;return t.gross>0?t.total*(v/t.gross):0}
 function saveSettings(){db.settings.otherIncome=+document.getElementById('otherIncome').value||0;db.settings.expenses=+document.getElementById('expenses').value||0;db.settings.vatReg=document.getElementById('vatReg').value;persist();alert('Tax settings saved on this device.')}
-function saveProfile(){db.settings.profile={name:document.getElementById('pName').value.trim(),email:document.getElementById('pEmail').value.trim(),address:document.getElementById('pAddress').value.trim(),bank:document.getElementById('pBank').value.trim(),accountName:document.getElementById('pAccountName').value.trim(),sortCode:document.getElementById('pSort').value.trim(),accountNumber:document.getElementById('pAccount').value.trim(),invoiceNote:document.getElementById('pInvoiceNote').value.trim()};persist();alert("Invoice details saved.");}
+function saveProfile(){let newName=document.getElementById('pName').value.trim();db.settings.displayName=newName||db.settings.displayName||'';db.settings.profile={name:newName,email:document.getElementById('pEmail').value.trim(),address:document.getElementById('pAddress').value.trim(),bank:document.getElementById('pBank').value.trim(),accountName:document.getElementById('pAccountName').value.trim(),sortCode:document.getElementById('pSort').value.trim(),accountNumber:document.getElementById('pAccount').value.trim(),invoiceNote:document.getElementById('pInvoiceNote').value.trim()};persist();updateWelcome();alert("Invoice details saved.");}
 function exportBackup(){let backup={...db,schemaVersion:DATA_SCHEMA,backupMeta:{app:'Shift 22',appVersion:APP_VERSION,exportedAt:new Date().toISOString()}};let b=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="shift-22-backup.json";a.click();URL.revokeObjectURL(a.href)}
 function importBackup(i){let f=i.files&&i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.shifts||!x.surgeries)throw 0;db=migrateData(x);persist();alert("Backup imported.")}catch(e){alert("That does not look like a Shift 22 backup.")}};r.readAsText(f)}
 
@@ -292,4 +305,26 @@ function renderTaxReturn(){
 }
 function printTaxSummary(){window.print()}
 
-render();</script></body></html>
+function updateWelcome(){
+ let n=((db.settings||{}).displayName||(db.settings.profile||{}).name||"").trim();
+ let el=document.getElementById("welcomeName");
+ if(el)el.textContent=n?"Welcome, "+n+" 👋":"Welcome 👋";
+}
+function finishWelcome(){
+ let n=document.getElementById("welcomeNameInput").value.trim();
+ if(!n)return alert("Please enter your name.");
+ db.settings.displayName=n;
+ if(!db.settings.profile)db.settings.profile={};
+ if(!db.settings.profile.name)db.settings.profile.name=n;
+ db.settings.onboardingComplete=true;
+ persist();
+ document.getElementById("welcomeModal").classList.remove("show");
+ updateWelcome();
+}
+function firstRunWelcome(){
+ updateWelcome();
+ if(!db.settings.onboardingComplete && db.shifts.length===0 && db.surgeries.length===0){
+   document.getElementById("welcomeModal").classList.add("show");
+ }
+}
+render();firstRunWelcome();</script></body></html>
