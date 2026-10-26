@@ -32,12 +32,20 @@ body{background:#f4f8f6}
  .invoice-table{font-size:12px}.invoice-table th,.invoice-table td{padding:7px 4px}
 }
 </style>
-</head><body><div class="app"><header class="top"><div class="brand"><div class="logo">£</div>Shift 22</div><div class="tag">Your shifts. Your money. Sorted.</div></header><main class="page">
+<style id="phone-first-v2">
+:root{--navh:84px}body{background:#f5f8f6}.app{max-width:680px;padding-bottom:calc(var(--navh) + env(safe-area-inset-bottom) + 16px)}
+.top{position:relative;top:auto;padding:20px 18px 18px;border-radius:0 0 24px 24px}.page{padding:14px 14px 24px}
+.nav{height:calc(var(--navh) + env(safe-area-inset-bottom));grid-template-columns:repeat(4,minmax(0,1fr))!important;padding:5px 8px env(safe-area-inset-bottom);gap:4px;background:rgba(255,255,255,.98)}
+.nav button{min-width:0;padding:7px 3px;border-radius:14px;font-size:12px!important;line-height:1.1;white-space:nowrap;overflow:hidden}.nav button.active{background:var(--pale)}
+.nav span{font-size:23px!important;margin-bottom:5px}.quick-actions{grid-template-columns:1fr 1fr}.quick-actions button{min-height:64px;border-radius:17px}
+.more-grid{gap:11px}.more-link{min-height:72px;font-size:16px;padding:15px 17px}.more-link small{font-size:12px;line-height:1.35}
+@media(max-width:390px){.page{padding-left:11px;padding-right:11px}.grid{gap:8px}.card{padding:13px}.metric b{font-size:18px}.quick-actions{gap:8px}.nav{padding-left:4px;padding-right:4px}.nav button{font-size:11px!important}}
+</style></head><body><div class="app"><header class="top"><div class="brand"><div class="logo">£</div>Shift 22</div><div class="tag">Your shifts. Your money. Sorted.</div></header><main class="page">
 <section id="dashboard" class="view active"><div class="grid"><div class="card metric"><small>EARNED</small><b id="earned">£0</b></div><div class="card metric"><small>OUTSTANDING</small><b id="outstanding">£0</b></div><div class="card metric"><small>PAID</small><b id="paid">£0</b></div><div class="card metric"><small>TAX POT</small><b id="taxpot">£0</b></div></div>
 <div class="quick-actions">
 <button class="btn" onclick="openShift()">＋ Add shift</button>
 <button class="btn secondary" onclick="openExpense()">▣ Add expense</button>
-<button class="btn secondary" onclick="openSimple('invoices')">▤ Money & invoices</button>
+<button class="btn secondary" onclick="openSimple('invoices')">▤ Invoices</button>
 <button class="btn secondary" onclick="openSimple('taxReturn')">✓ Tax summary</button>
 </div>
 <div class="section-title"><h2>Recent shifts</h2><button class="btn" onclick="openShift()">+ Add shift</button></div><div id="recent" class="list"></div><div class="section-title"><h2>At a glance</h2></div><div class="grid"><div class="card metric"><small>HOURS</small><b id="hours">0</b></div><div class="card metric"><small>SHIFTS</small><b id="count">0</b></div><div class="card metric"><small>INVOICED</small><b id="invoiced">£0</b></div><div class="card metric"><small>OVERDUE</small><b id="overdue">£0</b></div></div></section>
@@ -91,19 +99,16 @@ body{background:#f4f8f6}
   <div class="actions"><button class="btn secondary" onclick="printTaxSummary()">Print / Save tax-year summary</button></div>
 </section>
 
-<section id="more" class="view">
- <div class="section-title"><h2>More</h2></div>
- <div class="more-grid">
-  <button class="more-link" onclick="openSimple('surgeries')"><span>Surgeries<small>Rates, billing details and payment terms</small></span><span>›</span></button>
-  <button class="more-link" onclick="openSimple('taxReturn')"><span>Tax Return<small>Tax-year summary, expenses and estimated amount due</small></span><span>›</span></button>
-  <button class="more-link" onclick="openSimple('tax')"><span>Tax estimate<small>Quick tax-pot view</small></span><span>›</span></button>
-  <button class="more-link" onclick="openSimple('settings')"><span>Settings<small>Invoice profile, bank details and backup</small></span><span>›</span></button>
- </div>
-</section>
-<section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup</h3><p class="settings-note">Export a backup before clearing browser data or moving devices.</p><div class="actions"><button class="btn secondary" onclick="exportBackup()">Export backup</button><label class="btn ghost">Import backup<input type="file" accept=".json" style="display:none" onchange="importBackup(this)"></label></div></div></section></main><nav class="nav">
+<section id="more" class="view"><div class="section-title"><h2>More</h2></div><div class="more-grid">
+<button class="more-link" onclick="openSimple('invoices')"><span>Invoices<small>Create, view, save PDF and mark payments</small></span><span>›</span></button>
+<button class="more-link" onclick="openSimple('taxReturn')"><span>Tax summary<small>Income, allowable expenses, estimated tax and potential overpayment</small></span><span>›</span></button>
+<button class="more-link" onclick="openSimple('surgeries')"><span>Surgeries<small>Rates, billing addresses and payment terms</small></span><span>›</span></button>
+<button class="more-link" onclick="openSimple('tax')"><span>Tax settings<small>Other taxable income and quick tax estimate</small></span><span>›</span></button>
+<button class="more-link" onclick="openSimple('settings')"><span>Settings &amp; backup<small>Invoice details, bank details, export and import</small></span><span>›</span></button>
+</div></section>
+<section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift 22 mobile layout · v2</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup</h3><p class="settings-note">Export a backup before clearing browser data or moving devices.</p><div class="actions"><button class="btn secondary" onclick="exportBackup()">Export backup</button><label class="btn ghost">Import backup<input type="file" accept=".json" style="display:none" onchange="importBackup(this)"></label></div></div></section></main><nav class="nav" aria-label="Main navigation">
 <button class="active" onclick="go('dashboard',this)"><span>⌂</span>Home</button>
 <button onclick="go('shifts',this)"><span>◷</span>Shifts</button>
-<button onclick="go('invoices',this)"><span>▤</span>Money</button>
 <button onclick="go('expensesView',this)"><span>▣</span>Expenses</button>
 <button onclick="go('more',this)"><span>•••</span>More</button>
 </nav></div>
