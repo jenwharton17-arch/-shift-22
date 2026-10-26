@@ -76,6 +76,7 @@ body{background:#f4f8f6}
 <button class="btn secondary" onclick="openExpense()">▣ Add expense</button>
 <button class="btn secondary" onclick="openSimple('invoices')">▤ Invoices</button>
 <button class="btn secondary" onclick="openSimple('taxReturn')">✓ Tax summary</button>
+<button class="btn secondary" onclick="openSimple('timesheets')">📄 Chase Timesheet</button>
 </div>
 <div class="section-title"><h2>Recent shifts</h2><button class="btn" onclick="openShift()">+ Add shift</button></div><div id="recent" class="list"></div><div class="section-title"><h2>At a glance</h2></div><div class="grid"><div class="card metric"><small>HOURS</small><b id="hours">0</b></div><div class="card metric"><small>SHIFTS</small><b id="count">0</b></div><div class="card metric"><small>INVOICED</small><b id="invoiced">£0</b></div><div class="card metric"><small>OVERDUE</small><b id="overdue">£0</b></div></div></section>
 <section id="shifts" class="view"><div class="section-title"><h2>All shifts</h2><button class="btn" onclick="openShift()">+ Add shift</button></div><div id="shiftList" class="list"></div></section>
@@ -154,7 +155,7 @@ body{background:#f4f8f6}
  <div class="card">
   <div class="timesheet-badge">Chase Medical</div>
   <h3>Chase Medical Locum Timesheet</h3>
-  <p class="settings-note">Select up to 5 shifts for each PDF page. Shift It keeps the original Chase Medical form layout and fills the shift rows for you.</p>
+  <p class="settings-note">Select up to 5 shifts. Shift It uses the original Chase Medical form unchanged and only fills its existing blank fields and shift rows.</p>
   <div class="formgrid">
    <div class="field"><label>Surgery / centre</label><select id="tsSurgery" onchange="renderTimesheetChoices()"></select></div>
    <div class="field"><label>Your name</label><input id="tsName"></div>
@@ -190,7 +191,7 @@ body{background:#f4f8f6}
 </div>
 <p class="settings-note">Your shifts and other records stay on this device. Shift It updates can change the app code without intentionally replacing your saved records.</p>
 </div>
-</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift It · v2.8.0</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
+</section><section id="settings" class="view"><div class="section-title"><h2>Settings</h2></div><div class="settings-note" style="margin:0 2px 12px">Shift It · v2.8.2</div><div class="card"><h3 style="margin-top:0">Invoice profile</h3><p class="settings-note">Change these whenever you need to. New invoices use the current details.</p><div class="formgrid"><div class="field"><label>Your name / business name</label><input id="pName"></div><div class="field"><label>Email</label><input id="pEmail" type="email"></div><div class="field full"><label>Business / correspondence address</label><textarea id="pAddress"></textarea></div><div class="field"><label>Bank name</label><input id="pBank"></div><div class="field"><label>Account name</label><input id="pAccountName"></div><div class="field"><label>Sort code</label><input id="pSort" placeholder="00-00-00"></div><div class="field"><label>Account number</label><input id="pAccount" inputmode="numeric"></div><div class="field full"><label>Default invoice note</label><textarea id="pInvoiceNote"></textarea></div></div><div class="actions"><button class="btn" onclick="saveProfile()">Save invoice profile</button></div></div><div class="card" style="margin-top:12px"><h3 style="margin-top:0">Backup & restore</h3>
 <p class="settings-note"><b>Your records are stored on this device.</b> Export a backup regularly and before clearing Safari data or changing phones. App updates are designed to keep existing records.</p><div class="actions"><button class="btn secondary" onclick="exportBackup()">Export backup</button><label class="btn ghost">Import backup<input type="file" accept=".json" style="display:none" onchange="importBackup(this)"></label></div></div></section></main><nav class="nav" aria-label="Main navigation">
 <button class="active" onclick="go('dashboard',this)"><span>⌂</span>Home</button>
 <button onclick="go('shifts',this)"><span>◷</span>Shifts</button>
@@ -240,7 +241,7 @@ body{background:#f4f8f6}
 <div class="actions"><button class="btn" onclick="saveExpense()">Save expense</button><button id="deleteExpenseBtn" class="btn ghost" onclick="deleteExpense()" style="display:none">Delete</button><button class="btn ghost" onclick="closeModal('expenseModal')">Cancel</button></div>
 </div></div>
 <script>
-const APP_VERSION='2.8.0',DATA_SCHEMA=3;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
+const APP_VERSION='2.8.2',DATA_SCHEMA=3;const seed={schemaVersion:DATA_SCHEMA,surgeries:[],shifts:[],invoices:[],settings:{otherIncome:0,expenses:0,vatReg:'no',profile:{name:'',email:'',address:'',bank:'',accountName:'',sortCode:'',accountNumber:'',invoiceNote:''}}};
 let db=JSON.parse(localStorage.getItem('shift22-db')||localStorage.getItem('shiftmint-db')||'null')||seed;
 function migrateData(x){
  x=x&&typeof x==='object'?x:{};
